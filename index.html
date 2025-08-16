@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sevim.org</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #001f3f; /* Dark blue */
+            overflow: hidden; /* Prevent scrollbar due to canvas */
+        }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        .content {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body class="bg-[#001f3f] text-white">
+
+    <!-- The canvas for the particles will be appended here by the JS -->
+    <div id="particles-js" class="absolute inset-0"></div>
+
+    <div class="content relative z-20 min-h-screen flex flex-col justify-center items-center text-center p-4">
+        <div class="p-8 md:p-12 lg:p-16 bg-white/10 rounded-3xl shadow-2xl backdrop-blur-sm border border-white/20">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 text-[#cceeff]">
+                sevim.org
+            </h1>
+            <p class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light mb-8 text-[#90ee90]">
+                A place for our memories, stories, and connections.
+            </p>
+            <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center">
+                <a href="#about" class="px-6 py-3 rounded-full text-base sm:text-lg font-semibold bg-[#40e0d0] text-[#001f3f] hover:bg-[#cceeff] transition-colors duration-300 shadow-lg">
+                    About Our Family
+                </a>
+                <a href="#gallery" class="px-6 py-3 rounded-full text-base sm:text-lg font-semibold bg-[#007bff] text-white hover:bg-[#40e0d0] transition-colors duration-300 shadow-lg">
+                    See Our Gallery
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- The rest of your content sections would go here -->
+    <section id="about" class="content py-20 px-4 md:px-8 bg-[#001f3f]">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-[#90ee90]">About Us</h2>
+            <p class="text-white mb-6">Welcome to our corner of the internet! We created this website to share our family's story, celebrate our journey, and keep our loved ones updated. This is a space to cherish the past, live in the present, and look forward to the future.</p>
+        </div>
+    </section>
+
+    <section id="gallery" class="content py-20 px-4 md:px-8 bg-[#001f3f]">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-[#90ee90]">Photo Gallery</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Photo placeholders -->
+                <div class="bg-gray-700 aspect-video rounded-xl shadow-lg hover:scale-105 transition-transform duration-300"></div>
+                <div class="bg-gray-700 aspect-video rounded-xl shadow-lg hover:scale-105 transition-transform duration-300"></div>
+                <div class="bg-gray-700 aspect-video rounded-xl shadow-lg hover:scale-105 transition-transform duration-300"></div>
+                <div class="bg-gray-700 aspect-video rounded-xl shadow-lg hover:scale-105 transition-transform duration-300"></div>
+                <!-- Add more as needed -->
+            </div>
+        </div>
+    </section>
+
+    <footer class="content py-8 text-center text-white/50 bg-[#001f3f]">
+        <p>&copy; 2024 The Sevim Family. All Rights Reserved.</p>
+    </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const colors = ['#007bff', '#40e0d0', '#90ee90', '#cceeff', '#ffffff'];
+            
+            // Wait for the particles to be ready
+            function createParticles() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.style.position = 'absolute';
+                canvas.style.top = '0';
+                canvas.style.left = '0';
+                canvas.style.zIndex = '1';
+                canvas.style.pointerEvents = 'none';
+
+                let particles = [];
+                let width, height;
+
+                function resizeCanvas() {
+                    width = window.innerWidth;
+                    height = window.innerHeight;
+                    canvas.width = width;
+                    canvas.height = height;
+                }
+
+                function Particle(x, y, color) {
+                    this.x = x;
+                    this.y = y;
+                    this.vx = (Math.random() - 0.5) * 1.5;
+                    this.vy = (Math.random() - 0.5) * 1.5;
+                    this.radius = Math.random() * 2 + 1;
+                    this.color = color;
+                    this.opacity = Math.random();
+
+                    this.draw = function() {
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                        ctx.fillStyle = `rgba(${parseInt(this.color.slice(1, 3), 16)}, ${parseInt(this.color.slice(3, 5), 16)}, ${parseInt(this.color.slice(5, 7), 16)}, ${this.opacity})`;
+                        ctx.fill();
+                    };
+
+                    this.update = function() {
+                        this.x += this.vx;
+                        this.y += this.vy;
+
+                        // Bounce off walls
+                        if (this.x + this.radius > width || this.x - this.radius < 0) {
+                            this.vx = -this.vx;
+                        }
+                        if (this.y + this.radius > height || this.y - this.radius < 0) {
+                            this.vy = -this.vy;
+                        }
+
+                        this.draw();
+                    };
+                }
+
+                function init() {
+                    particles = [];
+                    for (let i = 0; i < 100; i++) {
+                        const x = Math.random() * width;
+                        const y = Math.random() * height;
+                        const color = colors[Math.floor(Math.random() * colors.length)];
+                        particles.push(new Particle(x, y, color));
+                    }
+                }
+
+                function animate() {
+                    requestAnimationFrame(animate);
+                    ctx.clearRect(0, 0, width, height);
+                    for (let i = 0; i < particles.length; i++) {
+                        particles[i].update();
+                    }
+                }
+
+                window.addEventListener('resize', resizeCanvas);
+                resizeCanvas();
+                init();
+                animate();
+
+                document.getElementById('particles-js').appendChild(canvas);
+            }
+            
+            createParticles();
+        });
+    </script>
+</body>
+</html>

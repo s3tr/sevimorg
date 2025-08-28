@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEVIM.ORG | Ingenuity meets Innovation</title>
+    <title>SEVIM.ORG</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
     <style>
@@ -81,7 +81,7 @@
     <!-- Main Content -->
     <div class="relative z-10 text-center px-4">
         <h1 class="title text-6xl md:text-8xl font-bold mb-4">SEVIM.ORG</h1>
-        <p class="subtitle text-xl md:text-2xl font-light tracking-wider">Ingenuity meets Innovation</p>
+
     </div>
     
     <script>
@@ -138,22 +138,19 @@
                 mouseX = e.clientX;
                 mouseY = e.clientY;
                 
-                // Update morph positions with delay for trailing effect
-                morphs.forEach((morph, index) => {
-                    setTimeout(() => {
-                        const delayFactor = (index + 1) * 0.1;
-                        const x = mouseX - (morph.offsetWidth / 2);
-                        const y = mouseY - (morph.offsetHeight / 2);
-                        
-                        morph.style.transform = `translate(${x}px, ${y}px)`;
-                        
-                        // Random shape morphing
-                        if (Math.random() > 0.7) {
-                            const radius1 = Math.random() * 50 + 20;
-                            const radius2 = Math.random() * 50 + 20;
-                            morph.style.borderRadius = `${radius1}% ${radius2}% ${radius1}% ${radius2}% / ${radius2}% ${radius1}% ${radius2}% ${radius1}%`;
-                        }
-                    }, index * 50);
+                // Update morph positions directly without delay
+                morphs.forEach((morph) => {
+                    const x = mouseX - (morph.offsetWidth / 2)-500;
+                    const y = mouseY - (morph.offsetHeight / 2)-250;
+                    
+                    morph.style.transform = `translate(${x}px, ${y}px)`;
+                    
+                    // Random shape morphing
+                    if (Math.random() > 0.7) {
+                        const radius1 = Math.random() * 50 + 20;
+                        const radius2 = Math.random() * 50 + 20;
+                        morph.style.borderRadius = `${radius1}% ${radius2}% ${radius1}% ${radius2}% / ${radius2}% ${radius1}% ${radius2}% ${radius1}%`;
+                    }
                 });
             });
         }

@@ -43,11 +43,12 @@
         .morph {
             position: absolute;
             border-radius: 50%;
-            filter: blur(30px);
-            opacity: 0.7;
+            filter: blur(60px);
+            opacity: 0.5;
             mix-blend-mode: screen;
             pointer-events: none;
-            transition: transform 0.2s ease-out;
+            transition: transform 0.1s linear;
+            will-change: transform;
         }
         
         .warp {
@@ -73,10 +74,10 @@
     <!-- Starfield Canvas -->
     <div id="starfield" class="absolute inset-0 overflow-hidden"></div>
     
-    <!-- Morph elements -->
-    <div id="morph1" class="morph bg-blue-500 w-64 h-64"></div>
-    <div id="morph2" class="morph bg-purple-500 w-48 h-48"></div>
-    <div id="morph3" class="morph bg-pink-500 w-32 h-32"></div>
+    <!-- Lens halo elements -->
+    <div id="morph1" class="morph bg-blue-400 w-96 h-96"></div>
+    <div id="morph2" class="morph bg-purple-400 w-80 h-80"></div>
+    <div id="morph3" class="morph bg-pink-300 w-64 h-64"></div>
     
     <!-- Main Content -->
     <div class="relative z-10 text-center px-4">
@@ -138,19 +139,20 @@
                 mouseX = e.clientX;
                 mouseY = e.clientY;
                 
-                // Update morph positions directly without delay
-                morphs.forEach((morph) => {
-                    const x = mouseX - (morph.offsetWidth / 2)-500;
-                    const y = mouseY - (morph.offsetHeight / 2)-250;
+                // Update morph positions with different offsets for layered effect
+                const offsets = [
+                    { x: 0, y: 0, scale: 1 },       // Center halo
+                    { x: -30, y: -20, scale: 0.8 },  // Offset halo 1
+                    { x: 20, y: 30, scale: 0.6 }     // Offset halo 2
+                ];
+                
+                morphs.forEach((morph, i) => {
+                    const offset = offsets[i];
+                    const x = mouseX - (morph.offsetWidth / 2) + offset.x -500;
+                    const y = mouseY - (morph.offsetHeight / 2) + offset.y-300;
                     
-                    morph.style.transform = `translate(${x}px, ${y}px)`;
-                    
-                    // Random shape morphing
-                    if (Math.random() > 0.7) {
-                        const radius1 = Math.random() * 50 + 20;
-                        const radius2 = Math.random() * 50 + 20;
-                        morph.style.borderRadius = `${radius1}% ${radius2}% ${radius1}% ${radius2}% / ${radius2}% ${radius1}% ${radius2}% ${radius1}%`;
-                    }
+                    morph.style.transform = `translate(${x}px, ${y}px) scale(${offset.scale})`;
+                    morph.style.opacity = 0.3 + (0.2 * i); // Vary opacity
                 });
             });
         }

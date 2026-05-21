@@ -1,220 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEVIM.ORG</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
-            overflow: hidden;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            color: white;
-            height: 100vh;
-            margin: 0;
-        }
-        
-        .title {
-            font-family: 'Orbitron', sans-serif;
-            text-shadow: 0 0 10px rgba(255,255,255,0.5), 
-                         0 0 20px rgba(0,255,255,0.7),
-                         0 0 30px rgba(0,150,255,0.5);
-            animation: pulse 2s infinite alternate;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.05); }
-        }
-        
-        .subtitle {
-            text-shadow: 0 0 5px rgba(255,255,255,0.3);
-        }
-        
-        .star {
-            position: absolute;
-            background-color: white;
-            border-radius: 50%;
-            pointer-events: none;
-        }
-        
-        .morph {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.5;
-            mix-blend-mode: screen;
-            pointer-events: none;
-            transition: transform 0.1s linear;
-            will-change: transform;
-        }
-        
-        .warp {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
-            transform: scale(0);
-            opacity: 0;
-            pointer-events: none;
-        }
-        
-        .warp.active {
-            animation: warp 1.5s ease-out forwards;
-        }
-        
-        @keyframes warp {
-            0% { transform: scale(0); opacity: 0.8; }
-            100% { transform: scale(10); opacity: 0; }
-        }
-    </style>
-</head>
-<body class="relative flex items-center justify-center">
-    <!-- Starfield Canvas -->
-    <div id="starfield" class="absolute inset-0 overflow-hidden"></div>
-    
-    <!-- Lens halo elements -->
-    <div id="morph1" class="morph bg-blue-400 w-96 h-96"></div>
-    <div id="morph2" class="morph bg-purple-400 w-80 h-80"></div>
-    <div id="morph3" class="morph bg-pink-300 w-64 h-64"></div>
-    
-    <!-- Main Content -->
-    <div class="relative z-10 text-center px-4">
-        <h1 class="title text-6xl md:text-8xl font-bold mb-4">SEVIM.ORG</h1>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>sevim.org</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    </div>
-    
-    <script>
-        // Starfield Animation
-        function createStarfield() {
-            const starfield = document.getElementById('starfield');
-            const starCount = 200;
-            
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                
-                // Random size between 1-3px
-                const size = Math.random() * 2 + 1;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                
-                // Random position
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.top = `${Math.random() * 100}%`;
-                
-                // Random opacity
-                star.style.opacity = Math.random() * 0.8 + 0.2;
-                
-                // Add animation
-                star.style.animation = `twinkle ${Math.random() * 5 + 3}s infinite alternate`;
-                
-                starfield.appendChild(star);
-            }
-            
-            // Add twinkle animation to style
-            const style = document.createElement('style');
-            style.innerHTML = `
-                @keyframes twinkle {
-                    0% { opacity: 0.2; }
-                    100% { opacity: ${Math.random() * 0.8 + 0.2}; }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-        
-        // Mouse Following Morphs
-        function setupMorphs() {
-            const morphs = [
-                document.getElementById('morph1'),
-                document.getElementById('morph2'),
-                document.getElementById('morph3')
-            ];
-            
-            let mouseX = 0;
-            let mouseY = 0;
-            
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-                
-                // Update morph positions with different offsets for layered effect
-                const offsets = [
-                    { x: 0, y: 0, scale: 1 },       // Center halo
-                    { x: -30, y: -20, scale: 0.8 },  // Offset halo 1
-                    { x: 20, y: 30, scale: 0.6 }     // Offset halo 2
-                ];
-                
-                morphs.forEach((morph, i) => {
-                    const offset = offsets[i];
-                    const x = mouseX - (morph.offsetWidth / 2) + offset.x -500;
-                    const y = mouseY - (morph.offsetHeight / 2) + offset.y-300;
-                    
-                    morph.style.transform = `translate(${x}px, ${y}px) scale(${offset.scale})`;
-                    morph.style.opacity = 0.3 + (0.2 * i); // Vary opacity
-                });
-            });
-        }
-        
-        // Warp Effect on Click
-        function setupWarpEffect() {
-            document.addEventListener('click', (e) => {
-                const warp = document.createElement('div');
-                warp.className = 'warp';
-                warp.style.left = `${e.clientX - 50}px`;
-                warp.style.top = `${e.clientY - 50}px`;
-                warp.style.width = '100px';
-                warp.style.height = '100px';
-                
-                document.body.appendChild(warp);
-                
-                // Trigger animation
-                setTimeout(() => {
-                    warp.classList.add('active');
-                }, 10);
-                
-                // Remove after animation
-                setTimeout(() => {
-                    warp.remove();
-                }, 1500);
-                
-                // Distort stars near click
-                const stars = document.querySelectorAll('.star');
-                stars.forEach(star => {
-                    const starX = star.offsetLeft + star.offsetWidth/2;
-                    const starY = star.offsetTop + star.offsetHeight/2;
-                    const distance = Math.sqrt(Math.pow(starX - e.clientX, 2) + Math.pow(starY - e.clientY, 2));
-                    
-                    if (distance < 200) {
-                        const angle = Math.atan2(starY - e.clientY, starX - e.clientX);
-                        const force = (200 - distance) / 2;
-                        
-                        star.style.transform = `translate(${Math.cos(angle) * force}px, ${Math.sin(angle) * force}px)`;
-                        
-                        // Return to original position
-                        setTimeout(() => {
-                            star.style.transform = 'translate(0, 0)';
-                        }, 1000);
-                    }
-                });
-            });
-        }
-        
-        // Initialize all animations
-        window.addEventListener('DOMContentLoaded', () => {
-            createStarfield();
-            setupMorphs();
-            setupWarpEffect();
-            
-            // Add random floating animation to title
-            const title = document.querySelector('.title');
-            setInterval(() => {
-                const x = (Math.random() - 0.5) * 10;
-                const y = (Math.random() - 0.5) * 10;
-                title.style.transform = `translate(${x}px, ${y}px)`;
-            }, 3000);
-        });
-    </script>
+    html, body {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      background: #111111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    .site-name {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: clamp(2rem, 8vw, 5rem);
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: #e8e8e8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <span class="site-name">sevim.org</span>
+  </div>
 </body>
 </html>
